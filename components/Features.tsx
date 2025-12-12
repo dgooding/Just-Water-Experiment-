@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Feature } from '../types';
 
 const features: Feature[] = [
@@ -36,6 +37,12 @@ const features: Feature[] = [
 
 export const Features: React.FC = () => {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   return (
     <div className="py-24 relative overflow-hidden">
@@ -73,47 +80,60 @@ export const Features: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal / Overlay */}
-      {selectedFeature && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fadeIn" onClick={() => setSelectedFeature(null)}></div>
-              <div className="relative bg-aqua-deep border border-aqua-glow/30 p-8 md:p-12 rounded-3xl max-w-2xl w-full shadow-[0_0_50px_rgba(159,255,203,0.2)] animate-fadeIn">
-                  <button 
-                    onClick={() => setSelectedFeature(null)}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+      {/* Modal Portal - Moves modal to document.body to avoid parent transforms/clipping */}
+      {mounted && selectedFeature && createPortal(
+          <div className="fixed inset-0 z-[9999] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 bg-black/95 backdrop-blur-md transition-opacity" 
+                onClick={() => setSelectedFeature(null)}
+              ></div>
+              
+              {/* Modal Container to center content */}
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
                   
-                  <div className="flex flex-col items-center text-center">
-                      <div className="w-20 h-20 bg-aqua-glow text-black rounded-full flex items-center justify-center mb-6 animate-[bounce_2s_infinite] shadow-[0_0_30px_rgba(159,255,203,0.6)]">
-                          {selectedFeature.icon}
-                      </div>
-                      <h3 className="text-3xl font-serif text-white mb-2">{selectedFeature.title}</h3>
-                      <div className="h-1 w-20 bg-aqua-glow mb-8"></div>
+                  {/* Modal Panel */}
+                  <div className="relative transform overflow-hidden rounded-3xl bg-aqua-deep border border-aqua-glow/30 p-6 md:p-12 text-left shadow-[0_0_50px_rgba(159,255,203,0.2)] transition-all animate-fadeIn max-w-2xl w-full my-8">
                       
-                      <div className="bg-black/40 p-6 rounded-xl border border-white/5 mb-8 w-full">
-                          <p className="text-lg text-gray-200 italic leading-relaxed font-serif">
-                             "{selectedFeature.doctorExplanation}"
-                          </p>
-                      </div>
+                      {/* Close Button */}
+                      <button 
+                        onClick={() => setSelectedFeature(null)}
+                        className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full z-10"
+                      >
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                      
+                      <div className="flex flex-col items-center text-center">
+                          <div className="w-20 h-20 bg-aqua-glow text-black rounded-full flex items-center justify-center mb-6 animate-[bounce_2s_infinite] shadow-[0_0_30px_rgba(159,255,203,0.6)] shrink-0">
+                              {selectedFeature.icon}
+                          </div>
+                          <h3 className="text-2xl md:text-3xl font-serif text-white mb-2">{selectedFeature.title}</h3>
+                          <div className="h-1 w-20 bg-aqua-glow mb-8 shrink-0"></div>
+                          
+                          <div className="bg-black/40 p-6 rounded-xl border border-white/5 mb-8 w-full">
+                              <p className="text-base md:text-lg text-gray-200 italic leading-relaxed font-serif">
+                                 "{selectedFeature.doctorExplanation}"
+                              </p>
+                          </div>
 
-                      <div className="flex w-full justify-between items-center px-4 md:px-12 bg-white/5 py-4 rounded-lg">
-                        <div className="text-center">
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Peer Reviewed By</p>
-                            <p className="text-aqua-light font-bold text-sm">A Dolphin</p>
-                        </div>
-                        <div className="w-px bg-white/10 h-8"></div>
-                        <div className="text-center">
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Confidence Level</p>
-                            <p className="text-aqua-light font-bold text-sm">110%</p>
-                        </div>
+                          <div className="flex w-full justify-between items-center px-4 md:px-12 bg-white/5 py-4 rounded-lg">
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Peer Reviewed By</p>
+                                <p className="text-aqua-light font-bold text-sm">A Dolphin</p>
+                            </div>
+                            <div className="w-px bg-white/10 h-8"></div>
+                            <div className="text-center">
+                                <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Confidence Level</p>
+                                <p className="text-aqua-light font-bold text-sm">110%</p>
+                            </div>
+                          </div>
                       </div>
                   </div>
               </div>
-          </div>
+          </div>,
+          document.body
       )}
     </div>
   );

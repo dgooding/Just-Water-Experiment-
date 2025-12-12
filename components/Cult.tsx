@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-export const Cult: React.FC = () => {
+interface CultProps {
+  onBack: () => void;
+}
+
+export const Cult: React.FC<CultProps> = ({ onBack }) => {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'joined'>('idle');
 
   const joinCult = (e: React.FormEvent) => {
@@ -14,6 +18,18 @@ export const Cult: React.FC = () => {
   return (
     <div className="pt-32 pb-20 px-6 min-h-screen animate-fadeIn flex flex-col items-center">
       <div className="max-w-3xl w-full">
+        
+        {/* Navigation Button - Sticky for mobile */}
+        <div className="mb-8 flex justify-start z-40 sticky top-20 md:relative md:top-0">
+          <button 
+              onClick={onBack}
+              className="group flex items-center gap-3 text-aqua-light hover:text-white transition-all px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 hover:bg-white/10"
+          >
+              <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+              <span className="uppercase tracking-widest text-xs font-bold">Return to Reality</span>
+          </button>
+        </div>
+
         <div className="text-center mb-12">
             <div className="inline-block mb-4">
                 <svg className="w-16 h-16 text-aqua-glow animate-[spin_10s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,6 +50,12 @@ export const Cult: React.FC = () => {
                 <p className="text-gray-400 text-sm">
                     Please stand by for telepathic instructions from the Grand Hydrator.
                 </p>
+                <button 
+                    onClick={onBack}
+                    className="mt-8 text-xs text-gray-500 hover:text-white underline"
+                >
+                    Return to home (for now)
+                </button>
              </div>
         ) : (
             <div className="glass-panel p-8 md:p-12 rounded-2xl">

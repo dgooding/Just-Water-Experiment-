@@ -29,12 +29,23 @@ export const Shop: React.FC<ShopProps> = ({ products, onViewProduct }) => {
     <div className="pt-32 pb-20 px-6 animate-fadeIn">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-serif text-white mb-4">The Boutique of Infinity</h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Exchange your worldly currency for eternal hydration. 
-            <br />
-            <span className="text-xs text-red-400 opacity-70">Warning: Prices may adjust based on your aura's credit score.</span>
-          </p>
+          <h1 className="text-5xl md:text-6xl font-serif text-white mb-6">The Boutique of Infinity</h1>
+          
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-gray-400 max-w-2xl mx-auto">
+                Exchange your worldly currency for eternal hydration. 
+            </p>
+            
+            <p className="text-sm text-red-400 font-bold uppercase tracking-widest animate-pulse border border-red-500/30 bg-red-500/10 px-4 py-2 rounded-full">
+                Warning: Prices may adjust based on your aura's credit score.
+            </p>
+
+            <div className="inline-block bg-aqua-deep/50 border border-aqua-glow/20 rounded-full px-6 py-2 mt-2">
+                <p className="text-[10px] text-aqua-glow uppercase tracking-widest flex items-center gap-2">
+                <span>🚰</span> Sourcing Transparency: 100% Garden Hose
+                </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
@@ -43,12 +54,12 @@ export const Shop: React.FC<ShopProps> = ({ products, onViewProduct }) => {
           ))}
         </div>
 
-        <div className="glass-panel p-12 rounded-3xl text-center max-w-4xl mx-auto relative overflow-hidden transition-all duration-500">
+        <div className="glass-panel p-12 rounded-3xl text-center max-w-4xl mx-auto relative overflow-hidden transition-all duration-500 shadow-[0_0_50px_rgba(159,255,203,0.1)] hover:shadow-[0_0_80px_rgba(159,255,203,0.2)]">
             <div className={`absolute inset-0 bg-aqua-glow/5 ${transferStatus === 'extracting' ? 'animate-pulse bg-red-500/10' : ''}`}></div>
             
             <h3 className="text-3xl font-serif text-white mb-6 relative z-10">The "Total Ascension" Bundle</h3>
-            <p className="text-gray-300 mb-8 relative z-10">
-                Includes all waters, a certificate of moisture, and a legally binding contract handing over your firstborn's dreams to our corporation.
+            <p className="text-gray-300 mb-8 relative z-10 max-w-2xl mx-auto">
+                Includes all waters, a certificate of moisture, and a legally binding contract handing over your <strong className="text-white">Netflix password</strong> and firstborn's dreams to our corporation.
             </p>
             <div className="text-5xl font-bold text-aqua-glow mb-8 relative z-10">$3,333.33</div>
             

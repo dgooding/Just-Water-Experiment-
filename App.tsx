@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home } from './components/Home';
 import { Origins } from './components/Origins';
 import { Shop } from './components/Shop';
@@ -68,6 +68,17 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
   const [returnView, setReturnView] = useState<ViewState>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Global mouse tracking for spotlight effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const handleNavigate = (view: ViewState) => {
     setCurrentView(view);
@@ -90,7 +101,7 @@ const App: React.FC = () => {
       case 'shop':
         return <Shop products={products} onViewProduct={(p) => handleViewProduct(p, 'shop')} />;
       case 'cult':
-        return <Cult />;
+        return <Cult onBack={() => handleNavigate('home')} />;
       case 'product-detail':
         return selectedProduct ? (
             <ProductDetail 
@@ -109,7 +120,16 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen text-gray-100 font-sans selection:bg-aqua-glow selection:text-black flex flex-col">
+    <div className="bg-black min-h-screen text-gray-100 font-sans selection:bg-aqua-glow selection:text-black flex flex-col overflow-x-hidden relative">
+      
+      {/* Divine Spotlight Effect */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
+        style={{
+            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(159, 255, 203, 0.05), transparent 40%)`
+        }}
+      />
+
       <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-white/5 px-6 py-4 flex justify-between items-center transition-all duration-300">
         <div 
           className="text-2xl font-serif font-bold text-white tracking-tighter cursor-pointer hover:text-aqua-glow transition-colors"
@@ -145,7 +165,7 @@ const App: React.FC = () => {
         </button>
       </nav>
 
-      <main className="flex-grow relative">
+      <main className="flex-grow relative z-10">
         {renderView()}
       </main>
 
@@ -158,7 +178,7 @@ const App: React.FC = () => {
         </button>
         <p className="text-gray-600 text-xs max-w-lg mx-auto leading-relaxed px-4">
           DISCLAIMER: HydroSanctus is legally classified as "damp air." It does not cure cancer, measles, the plague, or bad personality. 
-          If you experience levitation, please consult a geologist. Do not stare directly at the bottle. 
+          If you experience levitation, please consult a geologist. All products are made using a garden hose. Do not stare directly at the bottle. 
           No gods were harmed in the making of this water. No refunds if you fail to ascend.
         </p>
         <div className="mt-8 text-gray-700 text-[10px]">
