@@ -9,9 +9,10 @@ import { generateAbsurdTestimonial } from '../services/geminiService';
 interface HomeProps {
   products: Product[];
   onNavigate: (view: ViewState) => void;
+  onViewProduct: (product: Product) => void;
 }
 
-export const Home: React.FC<HomeProps> = ({ products, onNavigate }) => {
+export const Home: React.FC<HomeProps> = ({ products, onNavigate, onViewProduct }) => {
   const [testimonial, setTestimonial] = useState<{name: string, location: string, quote: string} | null>(null);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export const Home: React.FC<HomeProps> = ({ products, onNavigate }) => {
           
           <div className="grid md:grid-cols-3 gap-8">
             {products.slice(0, 3).map(p => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard key={p.id} product={p} onView={onViewProduct} />
             ))}
           </div>
           

@@ -4,9 +4,10 @@ import { Product } from '../types';
 
 interface ShopProps {
   products: Product[];
+  onViewProduct: (product: Product) => void;
 }
 
-export const Shop: React.FC<ShopProps> = ({ products }) => {
+export const Shop: React.FC<ShopProps> = ({ products, onViewProduct }) => {
   const handleSoulTransfer = () => {
     const confirm = window.confirm("Are you sure you want to transfer your soul? This action cannot be undone by mortal laws.");
     if (confirm) {
@@ -28,7 +29,7 @@ export const Shop: React.FC<ShopProps> = ({ products }) => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {products.map(p => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} onView={onViewProduct} />
           ))}
         </div>
 

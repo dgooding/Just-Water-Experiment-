@@ -1,21 +1,17 @@
 import React from 'react';
 import { Product } from '../types';
 
-export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  
-  const handleAcquire = () => {
-    const responses = [
-      "Access Denied: Your vibes are too low frequency.",
-      "Added to cart. Warning: This item weighs 400 tons spiritually.",
-      "Error 418: I'm a teapot, and this water is too pure for me.",
-      "Insufficient funds. Have you tried manifesting more money?",
-      "Item reserved. Please prepare a blood sacrifice for shipping."
-    ];
-    alert(responses[Math.floor(Math.random() * responses.length)]);
-  };
+interface ProductCardProps {
+    product: Product;
+    onView: (product: Product) => void;
+}
 
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onView }) => {
   return (
-    <div className="glass-panel rounded-2xl p-6 flex flex-col h-full transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(159,255,203,0.2)] group">
+    <div 
+        onClick={() => onView(product)}
+        className="glass-panel rounded-2xl p-6 flex flex-col h-full transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(159,255,203,0.2)] group cursor-pointer"
+    >
       <div className="relative h-64 mb-6 overflow-hidden rounded-xl bg-black/20">
         <img 
           src={product.imageUrl} 
@@ -43,7 +39,10 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       <div className="mt-8 pt-6 border-t border-aqua-light/20 flex items-center justify-between">
         <span className="text-2xl font-bold text-white">${product.price.toLocaleString()}</span>
         <button 
-          onClick={handleAcquire}
+          onClick={(e) => {
+              e.stopPropagation();
+              onView(product);
+          }}
           className="px-4 py-2 bg-transparent border border-aqua-glow text-aqua-glow rounded hover:bg-aqua-glow hover:text-black transition-colors font-semibold uppercase text-xs tracking-widest"
         >
           Acquire

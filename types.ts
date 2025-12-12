@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ViewState = 'home' | 'origins' | 'shop' | 'cult';
+export type ViewState = 'home' | 'origins' | 'shop' | 'cult' | 'product-detail';
 
 export interface Product {
   id: string;
@@ -9,6 +9,7 @@ export interface Product {
   price: number;
   features: string[];
   imageUrl: string;
+  longDescription?: string;
 }
 
 export interface ChatMessage {
@@ -21,4 +22,5 @@ export interface Feature {
   title: string;
   description: string;
   icon: React.ReactNode;
+  doctorExplanation?: string;
 }
